@@ -1,6 +1,6 @@
 'use client'
 
-import { updateProfile } from '../auth/actions'
+import { updateProfile } from '../../(auth)/auth/actions'
 import { useState } from 'react'
 
 export default function ProfileForm({ profile }: { profile: any }) {

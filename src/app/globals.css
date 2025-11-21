@@ -14,6 +14,41 @@
   --color-foreground: var(--foreground);
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Playfair Display', serif;
+
+  /* Maroon */
+  --color-maroon-50: #fdf4f4;
+  --color-maroon-100: #fbe8e8;
+  --color-maroon-200: #f6d5d5;
+  --color-maroon-300: #eeb3b3;
+  --color-maroon-400: #e38989;
+  --color-maroon-500: #d35f5f;
+  --color-maroon-600: #b84040;
+  --color-maroon-700: #8b1a1a;
+  --color-maroon-800: #6b1515;
+  --color-maroon-900: #4a0f0f;
+  --color-maroon-950: #2d0909;
+
+  /* Gold */
+  --color-gold-50: #fffef7;
+  --color-gold-100: #fffaeb;
+  --color-gold-200: #fff4c7;
+  --color-gold-300: #ffe99f;
+  --color-gold-400: #ffd966;
+  --color-gold-500: #ffc933;
+  --color-gold-600: #d4a017;
+  --color-gold-700: #b8860b;
+  --color-gold-800: #8b6914;
+  --color-gold-900: #6b5416;
+
+  /* Cream */
+  --color-cream-50: #fefdfb;
+  --color-cream-100: #fdfbf7;
+  --color-cream-200: #fbf7ef;
+  --color-cream-300: #f8f3e7;
+  --color-cream-400: #f5efdf;
+  --color-cream-500: #f2ebd7;
+  --color-cream-600: #e8ddc5;
+  --color-cream-700: #d4c9b1;
 }
 
 body {
@@ -29,4 +64,29 @@ h4,
 h5,
 h6 {
   font-family: 'Playfair Display', serif;
+}
+
+/* Bump animation for floating cart button */
+@keyframes bump {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.2);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+
+  75% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-bump {
+  animation: bump 0.5s ease-in-out;
 }

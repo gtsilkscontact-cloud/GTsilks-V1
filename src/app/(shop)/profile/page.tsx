@@ -30,7 +30,7 @@ export default async function ProfilePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-serif font-bold text-maroon-900">My Profile</h1>
-                <LogoutButton />
+
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -39,6 +39,9 @@ export default async function ProfilePage() {
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-2xl font-serif font-bold text-maroon-900 mb-6">Profile Details</h2>
                         <ProfileForm profile={profile} />
+                        <div className="mt-6 pt-6 border-t border-cream-200 flex justify-end">
+                            <LogoutButton />
+                        </div>
                     </div>
                 </div>
 
@@ -62,10 +65,10 @@ export default async function ProfilePage() {
                                                 </p>
                                             </div>
                                             <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
-                                                    order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-800' :
-                                                        order.status === 'CONFIRMED' ? 'bg-yellow-100 text-yellow-800' :
-                                                            order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                                                                'bg-gray-100 text-gray-800'
+                                                order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-800' :
+                                                    order.status === 'CONFIRMED' ? 'bg-yellow-100 text-yellow-800' :
+                                                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                                                            'bg-gray-100 text-gray-800'
                                                 }`}>
                                                 {order.status}
                                             </span>

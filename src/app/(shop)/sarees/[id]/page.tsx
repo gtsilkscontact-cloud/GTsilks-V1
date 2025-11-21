@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import AddToCartButton from './AddToCartButton'
+import AddToWishlistButton from './AddToWishlistButton'
 
 export default async function SareeDetailPage({
     params,
@@ -26,7 +27,7 @@ export default async function SareeDetailPage({
     const primaryImage = images.find((img: any) => img.is_primary)?.image_url || images[0]?.image_url
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28">
             <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
                 {/* Image Gallery */}
                 <div className="flex flex-col-reverse">
@@ -82,13 +83,14 @@ export default async function SareeDetailPage({
                                 <li><strong>State:</strong> {saree.state || 'N/A'}</li>
                                 <li><strong>Fabric:</strong> {saree.fabric || 'Silk'}</li>
                                 <li><strong>Occasion:</strong> {saree.occasion || 'Festive'}</li>
-                                <li><strong>Stock:</strong> {saree.stock_quantity > 0 ? `${saree.stock_quantity} in stock` : 'Out of stock'}</li>
+                                <li><strong>Stock:</strong> {saree.stock_quantity > 0 ? <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">In Stock</span> : <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Out of Stock</span>}</li>
                             </ul>
                         </div>
                     </div>
 
-                    <div className="mt-10 flex sm:flex-col1">
+                    <div className="mt-10 flex gap-4 flex-col sm:flex-row">
                         <AddToCartButton saree={saree} />
+                        <AddToWishlistButton saree={saree} />
                     </div>
                 </div>
             </div>

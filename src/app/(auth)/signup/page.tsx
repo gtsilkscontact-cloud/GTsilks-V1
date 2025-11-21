@@ -3,6 +3,7 @@
 import { signup } from '../auth/actions'
 import Link from 'next/link'
 import { useState } from 'react'
+import Button from '@/components/ui/Button'
 
 export default function SignupPage() {
     const [error, setError] = useState('')
@@ -165,10 +166,11 @@ export default function SignupPage() {
                         </div>
 
                         {/* Submit Button */}
-                        <button
+                        <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-maroon-800 to-maroon-700 text-cream-50 py-4 rounded-lg font-semibold hover:from-maroon-700 hover:to-maroon-600 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-lg"
+                            fullWidth
+                            className={loading ? 'opacity-75 cursor-not-allowed' : ''}
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center">
@@ -181,7 +183,7 @@ export default function SignupPage() {
                             ) : (
                                 'Create Account'
                             )}
-                        </button>
+                        </Button>
                     </form>
 
                     {/* Divider */}

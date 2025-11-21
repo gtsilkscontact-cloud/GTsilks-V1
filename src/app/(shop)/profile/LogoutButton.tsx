@@ -1,6 +1,6 @@
 'use client'
 
-import { logout } from '../auth/actions'
+import { logout } from '../../(auth)/auth/actions'
 import { useState } from 'react'
 
 export default function LogoutButton() {

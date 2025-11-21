@@ -1,5 +1,7 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import FloatingCart from '@/components/FloatingCart'
+import FloatingWishlist from '@/components/FloatingWishlist'
 
 export default function ShopLayout({
     children,
@@ -13,6 +15,10 @@ export default function ShopLayout({
                 {children}
             </main>
             <Footer />
+            {/* Floating cart button and popup - appears on all shop pages */}
+            <FloatingCart />
+            {/* Floating wishlist button and popup - appears on all shop pages */}
+            <FloatingWishlist />
         </div>
     )
 }

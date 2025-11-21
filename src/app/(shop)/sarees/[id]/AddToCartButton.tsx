@@ -2,6 +2,7 @@
 
 import { useCart } from '@/context/CartContext'
 import { useState } from 'react'
+import Button from '@/components/ui/Button'
 
 type AddToCartButtonProps = {
     saree: {
@@ -43,12 +44,12 @@ export default function AddToCartButton({ saree }: AddToCartButtonProps) {
     }
 
     return (
-        <button
+        <Button
             onClick={handleAddToCart}
-            className={`max-w-xs flex-1 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-pink-500 sm:w-full transition-colors ${isAdded ? 'bg-green-600 hover:bg-green-700' : 'bg-pink-600 hover:bg-pink-700'
-                }`}
+            className={`max-w-xs flex-1 sm:w-full ${isAdded ? 'bg-green-600 hover:bg-green-700 hover:shadow-[0_0_20px_rgba(22,163,74,0.6)]' : ''}`}
+            variant={isAdded ? 'primary' : 'primary'} // Keep primary but override class for green if added
         >
             {isAdded ? 'Added to Cart!' : 'Add to Cart'}
-        </button>
+        </Button>
     )
 }

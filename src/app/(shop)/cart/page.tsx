@@ -2,24 +2,25 @@
 
 import { useCart } from '@/context/CartContext'
 import Link from 'next/link'
+import Button from '@/components/ui/Button'
 
 export default function CartPage() {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useCart()
 
     if (cart.length === 0) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 text-center">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
                 <p className="text-gray-500 mb-8">Looks like you haven't added any sarees yet.</p>
-                <Link href="/sarees" className="inline-block bg-pink-600 text-white px-6 py-3 rounded-md hover:bg-pink-700">
+                <Button href="/sarees">
                     Start Shopping
-                </Link>
+                </Button>
             </div>
         )
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
 
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -63,7 +64,7 @@ export default function CartPage() {
                                         <button
                                             type="button"
                                             onClick={() => removeFromCart(item.id)}
-                                            className="font-medium text-pink-600 hover:text-pink-500"
+                                            className="font-medium text-maroon-600 hover:text-maroon-500"
                                         >
                                             Remove
                                         </button>
@@ -81,17 +82,14 @@ export default function CartPage() {
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">
-                        <Link
-                            href="/checkout"
-                            className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-pink-600 hover:bg-pink-700"
-                        >
+                        <Button href="/checkout" fullWidth>
                             Proceed to Checkout
-                        </Link>
+                        </Button>
                     </div>
                     <div className="mt-6 flex justify-center text-sm text-center text-gray-500">
                         <p>
                             or{' '}
-                            <Link href="/sarees" className="text-pink-600 font-medium hover:text-pink-500">
+                            <Link href="/sarees" className="text-maroon-600 font-medium hover:text-maroon-500">
                                 Continue Shopping<span aria-hidden="true"> &rarr;</span>
                             </Link>
                         </p>

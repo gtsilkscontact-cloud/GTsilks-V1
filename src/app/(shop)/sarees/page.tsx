@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
+import ProductCard from '@/components/ProductCard'
 
 export default async function SareesPage({
     searchParams,
@@ -51,7 +52,7 @@ export default async function SareesPage({
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28">
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Sidebar Filters */}
                 <aside className="w-full md:w-64 flex-shrink-0">
@@ -126,35 +127,7 @@ export default async function SareesPage({
                     {sarees && sarees.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {sarees.map((saree) => (
-                                <Link key={saree.id} href={`/sarees/${saree.id}`} className="group">
-                                    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 border border-cream-300 transform hover:-translate-y-1">
-                                        <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-cream-100 h-80 relative">
-                                            {saree.saree_images?.[0]?.image_url ? (
-                                                <img
-                                                    src={saree.saree_images[0].image_url}
-                                                    alt={saree.name}
-                                                    className="h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
-                                                />
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full text-gray-400">
-                                                    No Image
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="p-4 bg-cream-50">
-                                            <h3 className="text-lg font-serif font-semibold text-maroon-900 mb-2 group-hover:text-gold-700 transition-colors line-clamp-1">
-                                                {saree.name}
-                                            </h3>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <p className="text-xl font-bold text-maroon-800">₹{saree.price.toLocaleString()}</p>
-                                            </div>
-                                            <div className="flex gap-2 text-xs">
-                                                <span className="bg-gold-100 text-maroon-900 px-2 py-1 rounded">{saree.type}</span>
-                                                {saree.state && <span className="bg-cream-200 text-maroon-900 px-2 py-1 rounded">{saree.state}</span>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
+                                <ProductCard key={saree.id} saree={saree} />
                             ))}
                         </div>
                     ) : (

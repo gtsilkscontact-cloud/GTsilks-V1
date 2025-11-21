@@ -1,11 +1,11 @@
 export default function AboutPage() {
     return (
-        <div className="bg-cream-50">
+        <div>
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-maroon-900 via-maroon-800 to-maroon-700 text-cream-50 py-20">
+            <section className="pt-28 pb-12">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h1 className="text-5xl font-serif font-bold text-gold-400 mb-4">About GT Silks</h1>
-                    <p className="text-xl text-cream-100">
+                    <h1 className="text-5xl font-serif font-bold text-maroon-900 mb-4">About GT Silks</h1>
+                    <p className="text-xl text-gray-600">
                         Preserving Tradition, Celebrating Elegance
                     </p>
                 </div>
