@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import ProfileForm from './ProfileForm'
 import LogoutButton from './LogoutButton'
+import CancelOrderButton from '@/components/CancelOrderButton'
 
 export default async function ProfilePage() {
     const supabase = await createClient()
@@ -64,14 +65,19 @@ export default async function ProfilePage() {
                                                     })}
                                                 </p>
                                             </div>
-                                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
-                                                order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-800' :
-                                                    order.status === 'CONFIRMED' ? 'bg-yellow-100 text-yellow-800' :
-                                                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                                                            'bg-gray-100 text-gray-800'
-                                                }`}>
-                                                {order.status}
-                                            </span>
+                                            <div className="flex flex-col items-end gap-2">
+                                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
+                                                    order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-800' :
+                                                        order.status === 'CONFIRMED' ? 'bg-yellow-100 text-yellow-800' :
+                                                            order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
+                                                                'bg-gray-100 text-gray-800'
+                                                    }`}>
+                                                    {order.status}
+                                                </span>
+                                                {order.status === 'PENDING' && (
+                                                    <CancelOrderButton orderId={order.id} />
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="space-y-2">
                                             {order.order_items?.map((item: any) => (
@@ -84,6 +90,23 @@ export default async function ProfilePage() {
                                             <p className="font-semibold text-maroon-900">Total: ₹{order.total_amount.toLocaleString()}</p>
                                             <p className="text-sm text-gray-600">{order.payment_mode}</p>
                                         </div>
+                                        {order.status === 'SHIPPED' && order.tracking_number && (
+                                            <div className="mt-3 bg-blue-50 p-3 rounded border border-blue-100 text-sm">
+                                                <p className="font-semibold text-blue-900">Tracking Details:</p>
+                                                <p className="text-blue-800">Courier: {order.courier_name || 'N/A'}</p>
+                                                <p className="text-blue-800">Tracking #: {order.tracking_number}</p>
+                                                {order.tracking_link && (
+                                                    <a
+                                                        href={order.tracking_link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 hover:text-blue-800 underline mt-1 inline-block"
+                                                    >
+                                                        Track Order
+                                                    </a>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

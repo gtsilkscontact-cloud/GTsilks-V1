@@ -72,7 +72,7 @@ export default function AnimatedHero() {
                 name: dbData.name,
                 saree: dbData.saree_type,
                 points: dbData.key_facts || localData?.points || [],
-                link: dbData.shop_link || `/sarees?state=${encodeURIComponent(dbData.name)}`
+                link: dbData.wiki_link || localData?.link || `/sarees?state=${encodeURIComponent(dbData.name)}`
             }
         }
 

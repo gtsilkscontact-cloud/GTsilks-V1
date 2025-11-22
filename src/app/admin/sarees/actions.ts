@@ -11,6 +11,7 @@ export async function createSaree(formData: FormData) {
     const description = formData.get('description') as string
     const price = parseFloat(formData.get('price') as string)
     const mrp = parseFloat(formData.get('mrp') as string)
+    const cost_price = formData.get('cost_price') ? parseFloat(formData.get('cost_price') as string) : null
     const type = formData.get('type') as string
     const stock_quantity = parseInt(formData.get('stock_quantity') as string)
 
@@ -23,6 +24,7 @@ export async function createSaree(formData: FormData) {
                 description,
                 price,
                 mrp,
+                cost_price,
                 type,
                 stock_quantity,
             },
@@ -86,6 +88,7 @@ export async function updateSaree(id: string, formData: FormData) {
     const description = formData.get('description') as string
     const price = parseFloat(formData.get('price') as string)
     const mrp = parseFloat(formData.get('mrp') as string)
+    const cost_price = formData.get('cost_price') ? parseFloat(formData.get('cost_price') as string) : null
     const type = formData.get('type') as string
     const stock_quantity = parseInt(formData.get('stock_quantity') as string)
 
@@ -97,6 +100,7 @@ export async function updateSaree(id: string, formData: FormData) {
             description,
             price,
             mrp,
+            cost_price,
             type,
             stock_quantity,
         })

@@ -66,8 +66,8 @@ export default async function Footer() {
                     <div>
                         <h4 className="font-semibold text-gold-400 mb-4 uppercase tracking-wider text-sm">Customer Care</h4>
                         <ul className="space-y-2 text-sm">
-                            <li><Link href="/policies/shipping" className="hover:text-gold-300 transition-colors">Shipping & Delivery</Link></li>
-                            <li><Link href="/policies/returns" className="hover:text-gold-300 transition-colors">Returns & Exchanges</Link></li>
+                            <li><Link href="/shipping" className="hover:text-gold-300 transition-colors">Shipping & Delivery</Link></li>
+                            <li><Link href="/returns" className="hover:text-gold-300 transition-colors">Returns & Exchanges</Link></li>
                             <li><Link href="/faq" className="hover:text-gold-300 transition-colors">FAQ</Link></li>
                             <li><Link href="/order-tracking" className="hover:text-gold-300 transition-colors">Order Tracking</Link></li>
                         </ul>
@@ -93,9 +93,9 @@ export default async function Footer() {
 
                 <div className="border-t border-maroon-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-cream-400">
                     <p>&copy; {new Date().getFullYear()} GT Silks. All rights reserved.</p>
-                    <div className="mt-4 md:mt-0 space-x-4">
-                        <span>Privacy Policy</span>
-                        <span>Terms of Service</span>
+                    <div className="mt-4 md:mt-0 space-x-4 md:pr-32">
+                        <Link href="/privacy-policy" className="hover:text-gold-300 transition-colors">Privacy Policy</Link>
+                        <Link href="/terms-of-service" className="hover:text-gold-300 transition-colors">Terms of Service</Link>
                     </div>
                 </div>
             </div>

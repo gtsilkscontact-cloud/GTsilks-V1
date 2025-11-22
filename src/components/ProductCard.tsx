@@ -10,6 +10,7 @@ type Saree = {
     id: string
     name: string
     price: number
+    mrp?: number
     type: string
     state?: string
     stock_quantity: number
@@ -34,6 +35,7 @@ export default function ProductCard({ saree }: ProductCardProps) {
     const [showAddedToCart, setShowAddedToCart] = useState(false)
 
     const isWishlisted = isInWishlist(saree.id)
+    const discount = saree.mrp ? Math.round(((saree.mrp - saree.price) / saree.mrp) * 100) : 0
 
     const handleWishlistClick = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -87,6 +89,13 @@ export default function ProductCard({ saree }: ProductCardProps) {
                     ) : (
                         <div className="flex items-center justify-center h-full text-gray-400">
                             No Image
+                        </div>
+                    )}
+
+                    {/* Discount Badge */}
+                    {discount > 0 && (
+                        <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-md z-10">
+                            {discount}% OFF
                         </div>
                     )}
 
@@ -153,9 +162,16 @@ export default function ProductCard({ saree }: ProductCardProps) {
                         {saree.name}
                     </h3>
                     <div className="flex justify-between items-center mb-2">
-                        <p className="text-xl font-bold text-maroon-800">
-                            ₹{saree.price.toLocaleString('en-IN')}
-                        </p>
+                        <div className="flex flex-col">
+                            <p className="text-xl font-bold text-maroon-800">
+                                ₹{saree.price.toLocaleString('en-IN')}
+                            </p>
+                            {saree.mrp && saree.mrp > saree.price && (
+                                <p className="text-sm text-gray-500 line-through">
+                                    ₹{saree.mrp.toLocaleString('en-IN')}
+                                </p>
+                            )}
+                        </div>
                     </div>
                     <div className="flex gap-2 text-xs">
                         <span className="bg-gold-100 text-maroon-900 px-2 py-1 rounded">

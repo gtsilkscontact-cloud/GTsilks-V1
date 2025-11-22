@@ -76,9 +76,23 @@ export default function CartPage() {
                 </ul>
 
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                    <div className="flex justify-between text-base font-medium text-gray-900">
+                    <div className="flex justify-between text-base font-medium text-gray-900 mb-2">
                         <p>Subtotal</p>
-                        <p>₹{cartTotal}</p>
+                        <p>₹{cartTotal.toLocaleString('en-IN')}</p>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600 mb-4">
+                        <p>Shipping</p>
+                        <p>
+                            {cartTotal > 5000 ? (
+                                <span className="text-green-600">Free</span>
+                            ) : (
+                                <span>₹100</span>
+                            )}
+                        </p>
+                    </div>
+                    <div className="flex justify-between text-lg font-bold text-gray-900 mb-4 border-t pt-4">
+                        <p>Total</p>
+                        <p>₹{(cartTotal > 5000 ? cartTotal : cartTotal + 100).toLocaleString('en-IN')}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">

@@ -38,18 +38,18 @@ export default function FloatingCartButton({ onClick }: FloatingCartButtonProps)
         bg-maroon-700 hover:bg-maroon-800
         text-cream-50 
         rounded-full 
-        w-16 h-16
-        flex items-center justify-center
+        h-14 px-6
+        flex items-center justify-center gap-3
         shadow-lg hover:shadow-xl
         transition-all duration-300
-        hover:scale-110
+        hover:scale-105
         ${shouldBump ? 'animate-bump' : ''}
       `}
             aria-label="Open cart"
         >
             {/* Shopping bag icon */}
             <div className="relative">
-                <ShoppingBag className="w-7 h-7" />
+                <ShoppingBag className="w-6 h-6" />
 
                 {/* Cart count badge */}
                 {cartCount > 0 && (
@@ -58,6 +58,7 @@ export default function FloatingCartButton({ onClick }: FloatingCartButtonProps)
                     </span>
                 )}
             </div>
+            <span className="font-semibold text-lg hidden sm:inline">Your Cart</span>
         </button>
     )
 }

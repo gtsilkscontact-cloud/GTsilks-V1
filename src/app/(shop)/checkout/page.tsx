@@ -243,8 +243,24 @@ export default function CheckoutPage() {
                         </ul>
                         <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                             <div className="flex items-center justify-between">
-                                <dt className="text-base font-medium text-gray-900">Total</dt>
-                                <dd className="text-base font-medium text-gray-900">₹{cartTotal}</dd>
+                                <dt className="text-sm text-gray-600">Subtotal</dt>
+                                <dd className="text-sm font-medium text-gray-900">₹{cartTotal}</dd>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <dt className="text-sm text-gray-600">Shipping</dt>
+                                <dd className="text-sm font-medium text-gray-900">
+                                    {cartTotal > 5000 ? (
+                                        <span className="text-green-600">Free</span>
+                                    ) : (
+                                        <span>₹100</span>
+                                    )}
+                                </dd>
+                            </div>
+                            <div className="flex items-center justify-between border-t border-gray-200 pt-6">
+                                <dt className="text-base font-medium text-gray-900">Grand Total</dt>
+                                <dd className="text-base font-medium text-gray-900">
+                                    ₹{cartTotal > 5000 ? cartTotal : cartTotal + 100}
+                                </dd>
                             </div>
                         </dl>
                     </div>

@@ -1,7 +1,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
-export default async function UsersPage() {
+export default async function UsersPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams
+    const query = (params.query as string) || ''
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
@@ -10,11 +16,17 @@ export default async function UsersPage() {
         redirect('/admin/login')
     }
 
-    // Fetch all users
-    const { data: users, error } = await supabase
+    // Fetch users with search
+    let dbQuery = supabase
         .from('users')
         .select('*')
         .order('created_at', { ascending: false })
+
+    if (query) {
+        dbQuery = dbQuery.or(`full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
+    }
+
+    const { data: users, error } = await dbQuery
 
     if (error) {
         console.error('Error fetching users:', error)
@@ -22,10 +34,39 @@ export default async function UsersPage() {
 
     return (
         <div>
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
-                <p className="mt-2 text-gray-600">Manage your customer base</p>
+            <div className="mb-6 flex justify-between items-end">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+                    <p className="mt-2 text-gray-600">Manage your customer base</p>
+                </div>
             </div>
+
+            {/* Search Bar */}
+            <form method="get" className="mb-6">
+                <div className="flex gap-2">
+                    <input
+                        type="text"
+                        name="query"
+                        defaultValue={query}
+                        placeholder="Search by name, email, or phone..."
+                        className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-pink-500 focus:border-pink-500"
+                    />
+                    <button
+                        type="submit"
+                        className="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-900"
+                    >
+                        Search
+                    </button>
+                    {query && (
+                        <a
+                            href="/admin/users"
+                            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 flex items-center"
+                        >
+                            Clear
+                        </a>
+                    )}
+                </div>
+            </form>
 
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -81,7 +122,7 @@ export default async function UsersPage() {
                         {(!users || users.length === 0) && (
                             <tr>
                                 <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                                    No customers found
+                                    No customers found matching "{query}"
                                 </td>
                             </tr>
                         )}

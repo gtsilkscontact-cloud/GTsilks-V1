@@ -63,7 +63,7 @@ export default function CartPopup({ isOpen, onClose }: CartPopupProps) {
           ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full md:translate-y-4 pointer-events-none'}
           
           /* Desktop: appears above the floating button */
-          md:bottom-24 md:right-6
+          md:bottom-24 md:right-6 md:left-auto
           md:w-96 md:max-w-[calc(100vw-3rem)]
           md:max-h-[600px]
           

@@ -16,6 +16,7 @@ export default function MapStateForm({ params }: { params: Promise<{ id: string 
         saree_type: '',
         description: '',
         shop_link: '',
+        wiki_link: '',
         key_facts: ['']
     })
 
@@ -47,6 +48,7 @@ export default function MapStateForm({ params }: { params: Promise<{ id: string 
                 saree_type: data.saree_type,
                 description: data.description || '',
                 shop_link: data.shop_link || '',
+                wiki_link: data.wiki_link || '',
                 key_facts: Array.isArray(data.key_facts) && data.key_facts.length > 0 ? data.key_facts : ['']
             })
         }
@@ -164,15 +166,27 @@ export default function MapStateForm({ params }: { params: Promise<{ id: string 
                     />
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Shop Link</label>
-                    <input
-                        type="text"
-                        value={formData.shop_link}
-                        onChange={(e) => setFormData({ ...formData, shop_link: e.target.value })}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                        placeholder="e.g. /sarees?state=Tamil+Nadu"
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Shop Link</label>
+                        <input
+                            type="text"
+                            value={formData.shop_link}
+                            onChange={(e) => setFormData({ ...formData, shop_link: e.target.value })}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                            placeholder="e.g. /sarees?state=Tamil+Nadu"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Wiki Link (Know More)</label>
+                        <input
+                            type="text"
+                            value={formData.wiki_link}
+                            onChange={(e) => setFormData({ ...formData, wiki_link: e.target.value })}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                            placeholder="e.g. https://en.wikipedia.org/wiki/..."
+                        />
+                    </div>
                 </div>
 
                 <div>

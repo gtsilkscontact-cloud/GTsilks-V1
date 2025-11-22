@@ -62,10 +62,17 @@ export default async function SareeDetailPage({
 
                     <div className="mt-3">
                         <h2 className="sr-only">Product information</h2>
-                        <p className="text-3xl text-gray-900">₹{saree.price}</p>
-                        {saree.mrp > saree.price && (
-                            <p className="text-lg text-gray-500 line-through">MRP: ₹{saree.mrp}</p>
-                        )}
+                        <div className="flex items-center gap-4">
+                            <p className="text-3xl text-gray-900">₹{saree.price.toLocaleString('en-IN')}</p>
+                            {saree.mrp > saree.price && (
+                                <>
+                                    <p className="text-xl text-gray-500 line-through">₹{saree.mrp.toLocaleString('en-IN')}</p>
+                                    <span className="bg-red-100 text-red-800 text-sm font-bold px-2 py-1 rounded">
+                                        {Math.round(((saree.mrp - saree.price) / saree.mrp) * 100)}% OFF
+                                    </span>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     <div className="mt-6">
