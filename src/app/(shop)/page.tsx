@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import AnimatedHero from '@/components/AnimatedHero'
 import ProductCard from '@/components/ProductCard'
+import TrustStrip from '@/components/ui/TrustStrip'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -10,6 +11,7 @@ export default async function Home() {
     .from('sarees')
     .select('*, saree_images(image_url)')
     .eq('is_active', true)
+    .eq('is_featured', true)
     .limit(8)
     .order('created_at', { ascending: false })
 
@@ -22,11 +24,14 @@ export default async function Home() {
       {/* Hero Section */}
       <AnimatedHero />
 
+      {/* Trust Strip */}
+      <TrustStrip />
+
       {/* Featured Sarees */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-serif font-bold text-maroon-900 mb-4">Featured Sarees</h2>
-          <p className="text-lg text-gray-600">Handpicked collection of our finest silk sarees</p>
+          <h2 className="text-4xl font-serif font-bold text-maroon-900 mb-4">Handpicked for You</h2>
+          <p className="text-lg text-gray-600">Curated collection of our finest silk sarees</p>
         </div>
 
         {sarees && sarees.length > 0 ? (

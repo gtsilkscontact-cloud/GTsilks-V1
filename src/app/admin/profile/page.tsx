@@ -31,7 +31,7 @@ export default async function AdminProfilePage() {
                 <div className="lg:col-span-2">
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-6">Profile Information</h2>
-                        <AdminProfileForm profile={profile} />
+                        <AdminProfileForm profile={profile || { email: user.email }} />
                     </div>
                 </div>
 

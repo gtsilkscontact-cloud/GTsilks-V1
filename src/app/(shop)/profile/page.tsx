@@ -38,7 +38,7 @@ export default async function ProfilePage() {
                 <div className="lg:col-span-1">
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-2xl font-serif font-bold text-maroon-900 mb-6">Profile Details</h2>
-                        <ProfileForm profile={profile} />
+                        <ProfileForm profile={profile || {}} />
                         <div className="mt-6 pt-6 border-t border-cream-200 flex justify-end">
                             <LogoutButton />
                         </div>

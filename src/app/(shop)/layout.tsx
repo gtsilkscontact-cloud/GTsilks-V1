@@ -2,6 +2,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import FloatingCart from '@/components/FloatingCart'
 import FloatingWishlist from '@/components/FloatingWishlist'
+import MainContent from '@/components/layout/MainContent'
 
 export default function ShopLayout({
     children,
@@ -11,9 +12,9 @@ export default function ShopLayout({
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main className="flex-grow bg-cream-50">
+            <MainContent>
                 {children}
-            </main>
+            </MainContent>
             <Footer />
             {/* Floating cart button and popup - appears on all shop pages */}
             <FloatingCart />

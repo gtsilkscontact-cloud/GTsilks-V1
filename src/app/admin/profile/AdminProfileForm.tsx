@@ -2,89 +2,73 @@
 
 import { updateAdminProfile } from './actions'
 import { useState } from 'react'
+import EditableField from '@/components/ui/EditableField'
 
 export default function AdminProfileForm({ profile }: { profile: any }) {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
-    const [loading, setLoading] = useState(false)
-
-    async function handleSubmit(formData: FormData) {
-        setLoading(true)
-        setError('')
-        setSuccess(false)
-        const result = await updateAdminProfile(formData)
-        if (result?.error) {
-            setError(result.error)
-        } else if (result?.success) {
-            setSuccess(true)
-        }
-        setLoading(false)
-    }
 
     return (
-        <>
+        <div className="space-y-6">
             {error && (
-                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
                     {error}
                 </div>
             )}
             {success && (
-                <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm">
+                <div className="p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm">
                     Profile updated successfully!
                 </div>
             )}
 
-            <form action={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input
-                        type="email"
-                        value={profile?.email || ''}
-                        disabled
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 text-sm cursor-not-allowed"
-                    />
-                    <p className="mt-1 text-xs text-gray-500">Email cannot be changed</p>
+            <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Email</label>
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500 text-sm">
+                    {profile?.email || ''}
+                    <span className="ml-2 text-xs text-gray-400 italic">(Cannot be changed)</span>
                 </div>
+            </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input
-                        name="fullName"
-                        type="text"
-                        defaultValue={profile?.full_name || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm"
-                    />
+            <EditableField
+                label="Full Name"
+                name="fullName"
+                value={profile?.full_name || ''}
+                onSave={async (name, value) => {
+                    const formData = new FormData()
+                    formData.append('fullName', value)
+                    formData.append('phone', profile?.phone || '')
+
+                    const result = await updateAdminProfile(formData)
+                    if (result?.error) setError(result.error)
+                    else setSuccess(true)
+                    setTimeout(() => setSuccess(false), 3000)
+                }}
+            />
+
+            <EditableField
+                label="Phone"
+                name="phone"
+                value={profile?.phone || ''}
+                type="tel"
+                onSave={async (name, value) => {
+                    const formData = new FormData()
+                    formData.append('fullName', profile?.full_name || '')
+                    formData.append('phone', value)
+
+                    const result = await updateAdminProfile(formData)
+                    if (result?.error) setError(result.error)
+                    else setSuccess(true)
+                    setTimeout(() => setSuccess(false), 3000)
+                }}
+            />
+
+            <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Role</label>
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500 text-sm">
+                    {profile?.role || 'Admin'}
+                    <span className="ml-2 text-xs text-gray-400 italic">(Read-only)</span>
                 </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                    <input
-                        name="phone"
-                        type="tel"
-                        defaultValue={profile?.phone || ''}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <input
-                        type="text"
-                        value={profile?.role || 'Admin'}
-                        disabled
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 text-sm cursor-not-allowed"
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition-colors disabled:opacity-50 text-sm"
-                >
-                    {loading ? 'Updating...' : 'Update Profile'}
-                </button>
-            </form>
-        </>
+            </div>
+        </div>
     )
 }

@@ -63,6 +63,27 @@ export default async function AdminLayout({
                     >
                         Profile
                     </Link>
+                    <div className="px-6 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        Content
+                    </div>
+                    <Link
+                        href="/admin/map"
+                        className="block px-6 py-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
+                    >
+                        Interactive Map
+                    </Link>
+                    <Link
+                        href="/admin/pages"
+                        className="block px-6 py-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
+                    >
+                        Pages & Policies
+                    </Link>
+                    <Link
+                        href="/admin/settings"
+                        className="block px-6 py-3 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
+                    >
+                        Site Settings
+                    </Link>
                 </nav>
                 <div className="border-t p-6">
                     <div className="mb-4">

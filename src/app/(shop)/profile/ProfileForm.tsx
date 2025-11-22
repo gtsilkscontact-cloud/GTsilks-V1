@@ -2,113 +2,89 @@
 
 import { updateProfile } from '../../(auth)/auth/actions'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import EditableField from '@/components/ui/EditableField'
 
 export default function ProfileForm({ profile }: { profile: any }) {
+    const router = useRouter()
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
-    const [loading, setLoading] = useState(false)
 
-    async function handleSubmit(formData: FormData) {
-        setLoading(true)
-        setError('')
-        setSuccess(false)
+    const handleSave = async (fieldName: string, value: string) => {
+        const formData = new FormData()
+        formData.append('fullName', fieldName === 'fullName' ? value : profile?.full_name || '')
+        formData.append('phone', fieldName === 'phone' ? value : profile?.phone || '')
+        formData.append('address', fieldName === 'address' ? value : profile?.address || '')
+        formData.append('city', fieldName === 'city' ? value : profile?.city || '')
+        formData.append('state', fieldName === 'state' ? value : profile?.state || '')
+        formData.append('pincode', fieldName === 'pincode' ? value : profile?.pincode || '')
+
         const result = await updateProfile(formData)
         if (result?.error) {
             setError(result.error)
-        } else if (result?.success) {
+        } else {
             setSuccess(true)
+            router.refresh() // Reload the page to show updated data
         }
-        setLoading(false)
+        setTimeout(() => setSuccess(false), 3000)
     }
 
     return (
-        <>
+        <div className="space-y-6">
             {error && (
-                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
                     {error}
                 </div>
             )}
             {success && (
-                <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm">
+                <div className="p-3 bg-green-100 border border-green-400 text-green-700 rounded text-sm">
                     Profile updated successfully!
                 </div>
             )}
 
-            <form action={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input
-                        name="fullName"
-                        type="text"
-                        defaultValue={profile?.full_name || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
+            <EditableField
+                label="Full Name"
+                name="fullName"
+                value={profile?.full_name || ''}
+                onSave={handleSave}
+            />
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                    <input
-                        name="phone"
-                        type="tel"
-                        defaultValue={profile?.phone || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
+            <EditableField
+                label="Phone"
+                name="phone"
+                value={profile?.phone || ''}
+                type="tel"
+                onSave={handleSave}
+            />
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                    <textarea
-                        name="address"
-                        defaultValue={profile?.address || ''}
-                        required
-                        rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
+            <EditableField
+                label="Address"
+                name="address"
+                value={profile?.address || ''}
+                isTextArea
+                onSave={handleSave}
+            />
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-                    <input
-                        name="city"
-                        type="text"
-                        defaultValue={profile?.city || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
-                    <input
-                        name="state"
-                        type="text"
-                        defaultValue={profile?.state || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
-                    <input
-                        name="pincode"
-                        type="text"
-                        defaultValue={profile?.pincode || ''}
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-maroon-800 text-cream-50 py-2 rounded-lg font-semibold hover:bg-maroon-700 transition-colors disabled:opacity-50 text-sm"
-                >
-                    {loading ? 'Updating...' : 'Update Profile'}
-                </button>
-            </form>
-        </>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <EditableField
+                    label="City"
+                    name="city"
+                    value={profile?.city || ''}
+                    onSave={handleSave}
+                />
+                <EditableField
+                    label="State"
+                    name="state"
+                    value={profile?.state || ''}
+                    onSave={handleSave}
+                />
+                <EditableField
+                    label="Pincode"
+                    name="pincode"
+                    value={profile?.pincode || ''}
+                    onSave={handleSave}
+                />
+            </div>
+        </div>
     )
 }

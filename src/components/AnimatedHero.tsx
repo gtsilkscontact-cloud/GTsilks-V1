@@ -7,11 +7,30 @@ import Button from './ui/Button'
 import { stateData } from '@/data/sareeStateData'
 import Link from 'next/link'
 import { ArrowRight, Info } from 'lucide-react'
+import { createClient } from '@/utils/supabase/client'
 
 export default function AnimatedHero() {
     const [showMap, setShowMap] = useState(false)
     const [selectedState, setSelectedState] = useState<string | null>(null)
     const [hasSeenAnimation, setHasSeenAnimation] = useState(false)
+    const [mapData, setMapData] = useState<any[]>([])
+
+    // Fetch map states from database
+    useEffect(() => {
+        const fetchMapData = async () => {
+            const supabase = createClient()
+            const { data, error } = await supabase.from('map_states').select('*')
+            if (data) {
+                console.log('📊 Fetched map data from database:', data)
+                console.log('📊 Available states in DB:', data.map(s => `${s.name} (${s.state_code})`))
+                setMapData(data)
+            }
+            if (error) {
+                console.error('❌ Error fetching map data:', error)
+            }
+        }
+        fetchMapData()
+    }, [])
 
     // Check if user has seen the animation before
     useEffect(() => {
@@ -33,7 +52,39 @@ export default function AnimatedHero() {
         }
     }, [hasSeenAnimation])
 
-    const currentInfo = selectedState && stateData[selectedState] ? stateData[selectedState] : null
+    // Merge database data with local fallback data
+    const currentInfo = selectedState ? (() => {
+        console.log(`🖱️ Clicked state: "${selectedState}"`)
+
+        // Try to find by name in database (map sends full state name)
+        const dbData = mapData.find(s => s.name === selectedState)
+        const localData = stateData[selectedState]
+
+        if (dbData) {
+            // Use database data
+            const hasKeyFacts = dbData.key_facts && dbData.key_facts.length > 0
+            console.log(`📍 ${selectedState} - Data source: DATABASE`, {
+                hasKeyFacts,
+                keyFactsCount: dbData.key_facts?.length || 0,
+                usingFallback: !hasKeyFacts && localData?.points ? 'YES (using local points)' : 'NO'
+            })
+            return {
+                name: dbData.name,
+                saree: dbData.saree_type,
+                points: dbData.key_facts || localData?.points || [],
+                link: dbData.shop_link || `/sarees?state=${encodeURIComponent(dbData.name)}`
+            }
+        }
+
+        // Fallback to local data
+        if (localData) {
+            console.log(`📍 ${selectedState} - Data source: LOCAL FALLBACK`)
+            return localData
+        }
+
+        console.log(`📍 ${selectedState} - Data source: NONE (not found)`)
+        return null
+    })() : null
 
     return (
         <section className="relative w-full min-h-[800px] bg-cream-50 overflow-hidden flex flex-col items-center justify-center mb-16">
@@ -113,7 +164,7 @@ export default function AnimatedHero() {
                                     <span>Key Facts</span>
                                 </div>
                                 <ul className="space-y-3">
-                                    {currentInfo.points.map((point, index) => (
+                                    {currentInfo.points.map((point: string, index: number) => (
                                         <li key={index} className="flex items-start gap-3 text-gray-700">
                                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
                                             <span className="leading-relaxed">{point}</span>

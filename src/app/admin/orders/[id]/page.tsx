@@ -74,11 +74,11 @@ export default async function OrderDetailPage({
                         </div>
                         <div>
                             <dt className="text-sm font-medium text-gray-500">Email</dt>
-                            <dd className="text-sm text-gray-900">{order.customer_email}</dd>
+                            <dd className="text-sm text-gray-900">{order.email || 'N/A'}</dd>
                         </div>
                         <div>
                             <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                            <dd className="text-sm text-gray-900">{order.customer_phone}</dd>
+                            <dd className="text-sm text-gray-900">{order.phone || 'N/A'}</dd>
                         </div>
                     </dl>
                 </div>
@@ -108,7 +108,11 @@ export default async function OrderDetailPage({
             {/* Shipping Address */}
             <div className="bg-white p-6 rounded-lg shadow mb-6">
                 <h2 className="text-lg font-semibold mb-4">Shipping Address</h2>
-                <p className="text-sm text-gray-900">{order.shipping_address}</p>
+                <p className="text-sm text-gray-900">
+                    {order.address_line1}<br />
+                    {order.address_line2 && <>{order.address_line2}<br /></>}
+                    {order.city}, {order.state} - {order.pincode}
+                </p>
             </div>
 
             {/* Order Items */}

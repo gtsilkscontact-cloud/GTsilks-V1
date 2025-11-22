@@ -3,14 +3,64 @@
 import { useCart } from '@/context/CartContext'
 import { placeOrder } from './actions'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from '@/components/ui/Button'
+import { createClient } from '@/utils/supabase/client'
 
 export default function CheckoutPage() {
     const { cart, cartTotal, clearCart } = useCart()
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [loadingProfile, setLoadingProfile] = useState(true)
+    const [formData, setFormData] = useState({
+        customer_name: '',
+        customer_email: '',
+        customer_phone: '',
+        address_line1: '',
+        address_line2: '',
+        city: '',
+        state: '',
+        pincode: ''
+    })
+
+    useEffect(() => {
+        async function loadProfile() {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single()
+
+                if (profile) {
+                    setFormData({
+                        customer_name: profile.full_name || '',
+                        customer_email: user.email || '',
+                        customer_phone: profile.phone || '',
+                        address_line1: profile.address || '',
+                        address_line2: '',
+                        city: profile.city || '',
+                        state: profile.state || '',
+                        pincode: profile.pincode || ''
+                    })
+                } else {
+                    // If no profile but user exists, at least fill email
+                    setFormData(prev => ({ ...prev, customer_email: user.email || '' }))
+                }
+            }
+            setLoadingProfile(false)
+        }
+        loadProfile()
+    }, [])
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
+    }
 
     if (cart.length === 0) {
         return (
@@ -21,11 +71,11 @@ export default function CheckoutPage() {
         )
     }
 
-    async function handleSubmit(formData: FormData) {
+    async function handleSubmit(formDataObj: FormData) {
         setIsSubmitting(true)
         setError(null)
 
-        const result = await placeOrder(formData, cart)
+        const result = await placeOrder(formDataObj, cart)
 
         if (result.success) {
             clearCart()
@@ -34,6 +84,14 @@ export default function CheckoutPage() {
             setError(result.message || 'Something went wrong')
             setIsSubmitting(false)
         }
+    }
+
+    if (loadingProfile) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+                <p className="text-gray-500">Loading checkout details...</p>
+            </div>
+        )
     }
 
     return (
@@ -46,42 +104,105 @@ export default function CheckoutPage() {
                     <form action={handleSubmit} className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         <div className="sm:col-span-2">
                             <label htmlFor="customer_name" className="block text-sm font-medium text-gray-700">Full Name</label>
-                            <input type="text" name="customer_name" id="customer_name" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="customer_name"
+                                id="customer_name"
+                                required
+                                value={formData.customer_name}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div className="sm:col-span-2">
                             <label htmlFor="customer_email" className="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" name="customer_email" id="customer_email" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="email"
+                                name="customer_email"
+                                id="customer_email"
+                                required
+                                value={formData.customer_email}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div className="sm:col-span-2">
                             <label htmlFor="customer_phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" name="customer_phone" id="customer_phone" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="tel"
+                                name="customer_phone"
+                                id="customer_phone"
+                                required
+                                value={formData.customer_phone}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div className="sm:col-span-2">
                             <label htmlFor="address_line1" className="block text-sm font-medium text-gray-700">Address Line 1</label>
-                            <input type="text" name="address_line1" id="address_line1" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="address_line1"
+                                id="address_line1"
+                                required
+                                value={formData.address_line1}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div className="sm:col-span-2">
                             <label htmlFor="address_line2" className="block text-sm font-medium text-gray-700">Address Line 2</label>
-                            <input type="text" name="address_line2" id="address_line2" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="address_line2"
+                                id="address_line2"
+                                value={formData.address_line2}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-                            <input type="text" name="city" id="city" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="city"
+                                id="city"
+                                required
+                                value={formData.city}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
-                            <input type="text" name="state" id="state" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="state"
+                                id="state"
+                                required
+                                value={formData.state}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div>
                             <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode</label>
-                            <input type="text" name="pincode" id="pincode" required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2" />
+                            <input
+                                type="text"
+                                name="pincode"
+                                id="pincode"
+                                required
+                                value={formData.pincode}
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-maroon-500 focus:border-maroon-500 border p-2"
+                            />
                         </div>
 
                         <div className="sm:col-span-2 pt-4">

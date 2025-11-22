@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import DeleteSareeButton from './DeleteSareeButton'
+import FeaturedToggle from './FeaturedToggle'
 
 const ITEMS_PER_PAGE = 10
 
@@ -90,6 +91,9 @@ export default async function SareeList({
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Stock
                             </th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Featured
+                            </th>
                             <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
@@ -119,12 +123,15 @@ export default async function SareeList({
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span
                                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${saree.stock_quantity > 0
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'bg-red-100 text-red-800'
                                             }`}
                                     >
                                         {saree.stock_quantity}
                                     </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-center">
+                                    <FeaturedToggle id={saree.id} initialIsFeatured={saree.is_featured} />
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <Link

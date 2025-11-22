@@ -22,11 +22,13 @@ export async function updateAdminProfile(formData: FormData) {
 
     const { error } = await supabase
         .from('users')
-        .update({
+        .upsert({
+            id: user.id,
+            email: user.email,
             full_name: fullName,
             phone,
+            role: 'admin' // Ensure they are marked as admin in users table too
         })
-        .eq('id', user.id)
 
     if (error) {
         return { error: 'Failed to update profile' }

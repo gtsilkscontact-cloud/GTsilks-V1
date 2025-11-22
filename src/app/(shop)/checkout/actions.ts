@@ -20,14 +20,22 @@ export async function placeOrder(formData: FormData, cartItems: any[]) {
     // Calculate total
     const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
+    // Get current user if logged in
+    const { data: { user } } = await supabase.auth.getUser()
+
     // 1. Create Order
     const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
+            user_id: user?.id || null,
             customer_name: rawFormData.customer_name,
-            customer_email: rawFormData.customer_email,
-            customer_phone: rawFormData.customer_phone,
-            shipping_address: `${rawFormData.address_line1}, ${rawFormData.address_line2}, ${rawFormData.city}, ${rawFormData.state} - ${rawFormData.pincode}`,
+            email: rawFormData.customer_email,
+            phone: rawFormData.customer_phone,
+            address_line1: rawFormData.address_line1,
+            address_line2: rawFormData.address_line2,
+            city: rawFormData.city,
+            state: rawFormData.state,
+            pincode: rawFormData.pincode,
             total_amount: totalAmount,
             status: 'PENDING',
             payment_status: 'PENDING',

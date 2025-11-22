@@ -56,19 +56,20 @@ export default function CartPopup({ isOpen, onClose }: CartPopupProps) {
                 className={`
           fixed z-50
           bg-cream-50 
-          rounded-2xl 
+          rounded-t-2xl md:rounded-2xl 
           shadow-2xl
           border border-maroon-100
           transition-all duration-300 ease-out
-          ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
+          ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full md:translate-y-4 pointer-events-none'}
           
           /* Desktop: appears above the floating button */
-          bottom-24 right-6
-          w-96 max-w-[calc(100vw-3rem)]
-          max-h-[600px]
+          md:bottom-24 md:right-6
+          md:w-96 md:max-w-[calc(100vw-3rem)]
+          md:max-h-[600px]
           
           /* Mobile: full width panel from bottom */
-          md:bottom-24 md:right-6 md:w-96
+          bottom-0 left-0 right-0 w-full
+          max-h-[85vh]
         `}
             >
                 {/* Header */}
